@@ -70,6 +70,7 @@ describe("withGenerationVariant", () => {
 
   it("tags the request with any other backend", () => {
     expect(withGenerationVariant(base, "deepseek").variant).toBe("deepseek");
+    expect(withGenerationVariant(base, "claude").variant).toBe("claude");
     expect(withGenerationVariant(base, "local").variant).toBe("local");
   });
 
@@ -101,6 +102,7 @@ describe("the backends on offer", () => {
     // "Default" said only that it was the default, which is a fact about the
     // picker rather than about what will write the music.
     expect(GENERATION_VARIANT_LABELS.default).toBe("Open AI");
+    expect(GENERATION_VARIANT_LABELS.claude).toBe("Claude");
   });
 
   it("labels every backend it offers", () => {

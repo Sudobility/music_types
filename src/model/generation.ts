@@ -58,7 +58,7 @@ export type GenerateScoreRequestTrack = {
  * brief can be run through two backends and compared by ear, which became worth
  * doing once the provider was a configuration change rather than a code change.
  */
-export const GENERATION_VARIANTS = ["default", "deepseek", "local"] as const;
+export const GENERATION_VARIANTS = ["default", "deepseek", "claude", "local"] as const;
 export type GenerationVariant = (typeof GENERATION_VARIANTS)[number];
 
 /**
@@ -78,6 +78,7 @@ export const GENERATION_VARIANT_LABELS: Record<GenerationVariant, string> = {
   */
   default: "Open AI",
   deepseek: "DeepSeek",
+  claude: "Claude",
   /*
     A model running on the machine, served by LM Studio through ShapeShyft.
 

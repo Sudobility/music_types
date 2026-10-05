@@ -101,6 +101,8 @@ export type DevicePrefs = {
    * device" has to survive the device changing language.
    */
   language: string | null;
+  /** Last generation provider selected on this device. */
+  generationVariant: string;
   /**
    * The paper the reader last printed on, or `null` to follow the device's
    * region (`defaultPaperSizeFor`).
