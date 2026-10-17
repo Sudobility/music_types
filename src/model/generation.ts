@@ -204,6 +204,23 @@ export type GenerateScoreRequest = {
   lyricsTheme?: string;
 
   /**
+   * Which language the words are written in.
+   *
+   * The lyric pipeline downstream already splits either language onto notes —
+   * English by the syllable heuristic, Chinese one Han character to a note — but
+   * the model that *writes* the words has to be told which it is: the English
+   * ask hyphenates every long word ("Morn-ing light"), which is meaningless for
+   * Chinese (每字一音, no hyphen), and a Chinese lyric wants its tones to follow
+   * the melody's rise and fall where English wants its stresses on the beat.
+   *
+   * Absent means English, which is what every request asked for before this
+   * existed, so an old client is unchanged. Only ever sent alongside `lyrics`,
+   * for the same reason `lyricsTheme` is: a language for words nobody asked for
+   * is noise. This governs the lyric alone, not the piece's own brief.
+   */
+  lyricsLanguage?: "en" | "zh";
+
+  /**
    * Choices to KEEP, by name, from an earlier generation.
    *
    * Every dimension named here is used as given where it is still valid for
@@ -383,6 +400,7 @@ export const generateScoreRequestSchema = z.object({
   variant: z.string().optional(),
   lyrics: z.boolean().optional(),
   lyricsTheme: z.string().optional(),
+  lyricsLanguage: z.enum(["en", "zh"]).optional(),
   choices: z.lazy(() => generationChoicesSchema.partial()).optional(),
 });
 

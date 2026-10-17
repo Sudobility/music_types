@@ -38,6 +38,14 @@ export const GENERATE_SCORE_COMPLEXITY_OPTIONS = [
   "complex",
 ] as const satisfies readonly GenerateScoreComplexity[];
 
+/** The language a lyric is written in. Undefined on the request is English. */
+export type LyricsLanguage = "en" | "zh";
+
+export const LYRICS_LANGUAGE_OPTIONS = [
+  "en",
+  "zh",
+] as const satisfies readonly LyricsLanguage[];
+
 export type GenerateScoreKeyFifthsOption = { fifths: number; label: string };
 
 /** Fifths -7..7, labeled by major-key tonic. The separate mode field supplies major/minor. */
@@ -107,6 +115,14 @@ export type GenerateScoreRequestDraft = {
    * through must not become a subject line.
    */
   lyricsTheme?: string;
+  /**
+   * Which language the words are written in; English when absent.
+   *
+   * Only reaches the wire alongside the lyrics it describes — see
+   * `buildGenerateScoreRequest`. An app sets it from the language the reader is
+   * working in, so a Chinese session gets 中文 words rather than English ones.
+   */
+  lyricsLanguage?: "en" | "zh";
 };
 
 /**
@@ -181,6 +197,12 @@ export type NewProjectFormDraft = {
   /** What the words are about, when that is not what the piece is about. Blank is "the same". */
   lyricsTheme: string;
   /**
+   * Which language the words are written in. Set from the language the reader is
+   * working in, so a Chinese session writes 中文 lyrics; English when the app
+   * leaves it alone.
+   */
+  lyricsLanguage?: "en" | "zh";
+  /**
    * The instrumentation, in order. Ordered because the first track that is not
    * percussion carries the melody, which makes position a musical decision.
    */
@@ -212,6 +234,7 @@ export type NewProjectDraftAction =
   | { type: "setVariant"; variant: string }
   | { type: "setLyrics"; lyrics: boolean }
   | { type: "setLyricsTheme"; lyricsTheme: string }
+  | { type: "setLyricsLanguage"; lyricsLanguage: "en" | "zh" | undefined }
   | { type: "addInstrument"; value: string }
   | { type: "removeInstrument"; id: number }
   | { type: "replaceInstrument"; id: number; value: string }
