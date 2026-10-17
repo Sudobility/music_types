@@ -13,6 +13,7 @@ import {
   timeSignatureSchema,
 } from "./schemas";
 import type {
+  Lyric,
   Score,
   ScoreFragment,
   KeySignature,
@@ -489,6 +490,41 @@ export const generationJobKindSchema = z.enum([
   "replace-measures",
   "replace-track",
 ]);
+
+/**
+ * Align a line of words onto a project's existing melody.
+ *
+ * Unlike the five generation kinds this is not a model job: the words are given,
+ * and the server lays them on the tune deterministically (music_types'
+ * `alignLyricsToTrack` over the shared syllable rules). It is a synchronous
+ * route rather than a queued job, so it carries its own small request and reply
+ * rather than going through `GenerationJobKind`.
+ */
+export type AlignLyricsRequest = {
+  /** The words to align, written as a lyric sheet does — spaces and hyphens. */
+  text: string;
+  /** Which track to sing. Defaults to the project's vocal track, else the first. */
+  trackId?: string;
+  /** Language rules for an un-hyphenated word; detected from the text when absent. */
+  language?: "en" | "zh";
+};
+
+export const alignLyricsRequestSchema = z.object({
+  text: z.string().min(1),
+  trackId: z.string().min(1).optional(),
+  language: z.enum(["en", "zh"]).optional(),
+});
+
+export type AlignLyricsResponse = {
+  /** The project's score with the track's lyrics rewritten. */
+  score: Score;
+  /** How many syllables were placed on a note. */
+  applied: number;
+  /** Words that did not fit — more syllables than the tune has notes. */
+  leftover: Lyric[];
+  /** The track the words were sung on, or null when the score has none to sing. */
+  trackId: string | null;
+};
 
 /**
  * A job's own lifecycle, which is richer than its project's: `cancelled`
