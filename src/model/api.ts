@@ -240,6 +240,14 @@ export type Snapshot = {
    */
   publicName?: string;
   createdAt: string;
+  /**
+   * True once a flag against this snapshot has been **confirmed** by a site
+   * admin: it is hidden from the Community and the public page, but kept so the
+   * owner can see what happened. Absent means visible.
+   */
+  removedFromCommunity?: boolean;
+  /** The reason the admin confirmed, shown to the owner. Present with the above. */
+  removalReason?: FlagReason;
 };
 
 /** What an anonymous visitor receives. Carries no owner identity, by construction. */
@@ -267,6 +275,51 @@ export type CommunityItem = Omit<PublishedSnapshot, "score"> & {
 
 /** A snapshot without its score — what the picker lists, so it stays cheap. */
 export type SnapshotSummary = Omit<Snapshot, "score" | "uiPrefs">;
+
+// ---------------------------------------------------------------------------
+// 7a. Flagging a shared snapshot
+// ---------------------------------------------------------------------------
+
+/**
+ * Why a viewer is reporting a shared snapshot. A closed list so both apps draw
+ * the same choices and the server can validate one; the value is a stable key
+ * each app turns into words with `flagReasonLabelKey` + `t()`.
+ */
+export const FLAG_REASONS = ["copyright", "offensive", "other"] as const;
+export type FlagReason = (typeof FLAG_REASONS)[number];
+
+/**
+ * A flag's lifecycle. `submitted` when a viewer sends it; a site admin reviewing
+ * it either rejects it (`rejected`, leaves the queue) or confirms it
+ * (`confirmed`, the snapshot is hidden from the Community).
+ */
+export const FLAG_STATUSES = ["submitted", "rejected", "confirmed"] as const;
+export type FlagStatus = (typeof FLAG_STATUSES)[number];
+
+/** The i18n key an app resolves a reason to. The value is the key's stable half. */
+export const flagReasonLabelKey = (reason: FlagReason): string =>
+  `flag.reason.${reason}`;
+
+/** The i18n key an app resolves a status to. */
+export const flagStatusLabelKey = (status: FlagStatus): string =>
+  `flag.status.${status}`;
+
+/**
+ * One row of the site-admin review queue. Carries no reporter identity — the
+ * queue is about the snapshot, not who objected to it.
+ */
+export type SnapshotFlag = {
+  id: UUID;
+  /** The shared snapshot being flagged. */
+  publicId: string;
+  /** The public title and publisher, so the admin knows what they are judging. */
+  publicName: string;
+  publisherName: string;
+  reason: FlagReason;
+  details: string;
+  status: FlagStatus;
+  createdAt: string;
+};
 
 export type ProjectCreateRequest = {
   name: string;
@@ -365,6 +418,29 @@ export const projectRecordSchema = projectSaveResultSchema.extend({
   score: scoreSchema,
 });
 
+export const flagReasonSchema = z.enum(FLAG_REASONS);
+export const flagStatusSchema = z.enum(FLAG_STATUSES);
+
+/** What a viewer sends to flag a shared snapshot. Details must contain text. */
+export const flagRequestSchema = z.object({
+  publicId: z.string().min(1),
+  reason: flagReasonSchema,
+  details: z.string().trim().min(1).max(2000),
+});
+export type FlagRequest = z.infer<typeof flagRequestSchema>;
+
+/** One row of the admin review queue. */
+export const snapshotFlagSchema = z.object({
+  id: z.string().min(1),
+  publicId: z.string().min(1),
+  publicName: z.string().min(1),
+  publisherName: z.string().min(1),
+  reason: flagReasonSchema,
+  details: z.string().min(1),
+  status: flagStatusSchema,
+  createdAt: z.string().min(1),
+});
+
 export const snapshotSummarySchema = z.object({
   id: z.string().min(1),
   projectId: z.string().min(1),
@@ -376,6 +452,10 @@ export const snapshotSummarySchema = z.object({
   publicId: z.string().min(1).optional(),
   publisherName: z.string().min(1).optional(),
   publicName: z.string().min(1).optional(),
+  // Set when a flag against this snapshot was confirmed: the owner sees it was
+  // removed, and why.
+  removedFromCommunity: z.boolean().optional(),
+  removalReason: flagReasonSchema.optional(),
 });
 
 export const snapshotSchema = snapshotSummarySchema.extend({
