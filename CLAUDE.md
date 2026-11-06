@@ -40,7 +40,8 @@ Everything exports from a single sectioned `src/index.ts`:
 Then the shared primitives under `src/domain/` (score, commands, instruments, notation, generation, …) and the shared vocabulary:
 
 - `src/formats/` — the codecs' option and result types and the audio-import extensions
-- `src/platform/` — the platform contracts (`ScoreFiles`, `PrefsStorage`/`DocumentFileStorage`, `XmlParser`, `FileExporter`, MIDI input, playback)
+- `src/platform/` — the platform contracts (`ScoreFiles`, `PrefsStorage`/`DocumentFileStorage`, `XmlParser`, `FileExporter`, MIDI input, playback — including the `SynthBackend` synth contract in `playback.ts`)
+- `src/playback/` — pure playback/voicing helpers shared by `music_player`'s scheduler and the synth packages: `channel-allocator`, `mix` (headroom trim + export limiter), `instrument-gain`
 - `src/domain/editor/` — the editor's vocabulary (edit modes, device prefs, toasts, `LAYOUT_MODES`/`LayoutMode`, `PAPER_OPTIONS`/`ORIENTATION_OPTIONS`, docs, inspector, toolbar and context-menu vocabularies, input shapes, copy contracts)
 - `src/domain/documents/` — `export-formats.ts` (`WRITABLE_EXPORT_FORMATS`), `formats.ts` (`IMPORT_FORMATS`/`EXPORT_FORMATS`), `templates.ts`, `document-state.ts`, `publish.ts`, and `project-file.ts` (`DOCUMENT_EXTENSION(S)`, `PROJECT_FILE_VERSION`, `ProjectFile`; the parser and serializer are music_codecs')
 - `src/domain/generation/request-drafts.ts` / `replace-drafts.ts` — the generation forms; `src/domain/score/transport-settings.ts` — `TransportSettings`/`PlayerFailure`
@@ -87,12 +88,25 @@ Then the shared primitives under `src/domain/` (score, commands, instruments, no
   sample-pack loader decodes. The module exists precisely so there is one
   alphabet and one round-trip test rather than a copy each — splitting it would
   break the property it was written to guarantee.
-- **The playback *plan* is here; the engine *contract* is not.** `PlaybackPlan`
-  composes `PerformanceTimeline`, which `performanceTimeline()` in
-  `domain/score/` produces, so the whole plan cluster is anchored here — moving
-  it would make this package import from `music_player`. `PlaybackEngine`,
-  `PlaybackObserver` and `AuditionVoice` did move, because that package is the
-  only thing that implements or calls them.
+- **The playback *plan* is here; the single-home *engine* contract is not, but
+  the multi-home *synth* contract is.** `PlaybackPlan` composes
+  `PerformanceTimeline`, which `performanceTimeline()` in `domain/score/`
+  produces, so the whole plan cluster is anchored here — moving it would make
+  this package import from `music_player`. `PlaybackEngine`, `PlaybackObserver`
+  and `AuditionVoice` live in `music_player`, which is the only thing that
+  implements or calls them. **`SynthBackend` (with `ScheduledClick` and
+  `PrepareResult`), by contrast, lives here** (`platform/playback.ts`): it has
+  more than one implementer across packages — `music_synth`'s `WebSynthBackend`
+  and `music_synth_rn`'s `NativeSynthBackend` — and `music_player`'s scheduler
+  consumes it, so none of the three can own it. Same rule as a `labelKey` or a
+  closed vocabulary: a contract with several homes belongs in the base they all
+  depend on.
+- **Pure playback/voicing helpers live in `src/playback/`** — `channel-allocator`,
+  `mix` (headroom trim + the export limiter), `instrument-gain`. They are pure
+  and shared by `music_player`'s scheduler and the synth packages (the engine
+  and a backend disagreeing on a channel assignment is a silent note loss), so
+  they sit beside the `SynthBackend` contract rather than in any one consumer —
+  the same "pure helpers both sides use" rule the format tables follow.
 
 - Pure shared domain logic belongs here when both frontend and backend need it:
   tick math, factories, commands, validation, instrument knowledge, generation
