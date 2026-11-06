@@ -55,6 +55,12 @@ export * from "./formats/index";
 export * from "./platform/index";
 
 // ---------------------------------------------------------------------------
+// 12. Pure playback/voicing helpers (shared by music_player's scheduler and
+//     the synth packages @sudobility/music_synth and music_synth_rn)
+// ---------------------------------------------------------------------------
+export * from "./playback/index";
+
+// ---------------------------------------------------------------------------
 // 10. Pure domain primitives (shared by frontend and backend)
 // ---------------------------------------------------------------------------
 
