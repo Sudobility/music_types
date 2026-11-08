@@ -26,7 +26,19 @@ import { createId } from "../score/ids";
 import type { Score } from "../../index";
 import type { CommandKind, ScoreCommand } from "./types";
 
-enablePatches();
+/**
+ * Immer's patch plugin must be enabled before `produceWithPatches`/`applyPatches`
+ * run. Enabling it lazily on first command construction — rather than at module
+ * scope — keeps this module free of an import-time side effect, so the package
+ * can declare `sideEffects: false` and a bundler can tree-shake unused commands.
+ * `enablePatches()` is idempotent; the guard just avoids re-calling it.
+ */
+let patchesEnabled = false;
+function ensurePatchesEnabled(): void {
+  if (patchesEnabled) return;
+  enablePatches();
+  patchesEnabled = true;
+}
 
 /**
  * Builds a `ScoreCommand` whose forward/inverse changes are computed by
@@ -41,6 +53,7 @@ export function snapshotCommand(
   kind: CommandKind = "content",
   coalesceKey?: string,
 ): ScoreCommand {
+  ensurePatchesEnabled();
   let inversePatches: Patch[] | null = null;
 
   return {
