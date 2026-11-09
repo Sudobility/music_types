@@ -6,7 +6,7 @@
       "name": "@sudobility/music_types",
       "devDependencies": {
         "@eslint/js": "~9.39.5",
-        "@sudobility/types": "^1.9.78",
+        "@sudobility/types": "^1.9.79",
         "@typescript-eslint/eslint-plugin": "~8.72.0",
         "@typescript-eslint/parser": "~8.72.0",
         "ajv": "~8.20.0",
@@ -21,7 +21,7 @@
         "zod": "~4.6.5",
       },
       "peerDependencies": {
-        "@sudobility/types": "^1.9.78",
+        "@sudobility/types": "^1.9.79",
         "immer": "^10.0.0 || ^11.0.0",
         "zod": "^4.0.0",
       },
@@ -226,7 +226,7 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.78", "https://npm.pkg.github.com/download/@sudobility/types/1.9.78/19ca0df5ad7d490bafc1b84384a8002f5dbc29ea", {}, "sha512-W6DYMUf7D0cVVUHDv5T8YZ339Wyay6xPx0CsdfNVgHDsm1ISDLhwacUwlM9xnvwXHGuAhP77wRVVo3uKGZe46Q=="],
+    "@sudobility/types": ["@sudobility/types@1.9.79", "https://npm.pkg.github.com/download/@sudobility/types/1.9.79/59975e39d6ab7e215418a489ef3cfe214b7521f4", {}, "sha512-rRtDT++fVy+I1m6E31fq752lxCQytFzwfqpJe5wDMPLcC1rJOBa7v+4+5e3cmX8VV1CsuLg8PTLMFe6A7AELRQ=="],
 
     "@types/argparse": ["@types/argparse@1.0.38", "", {}, "sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA=="],
 

@@ -34,7 +34,8 @@ that dependency.
   emits `dist/`** (one bundled `dist/index.js`, plus `dist/test/fixtures.js` as a
   separate entry — `@sudobility/music_types/test` is a real subpath across the family).
 - `bun run verify` — typecheck + lint + test + build (before any push).
-- `bun run test` — vitest (`src/*.test.ts`). `bun run build` — emit `dist/`.
+- `bun run test:unit` — vitest run (`src/**/*.test.ts`); `bun run test:watch` to watch.
+  There is **no** `bun run test` script. `bun run build` — emit `dist/`.
 
 ## Structure
 
