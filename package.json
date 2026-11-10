@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/js": "~9.39.5",
+    "@sudobility/printing_core": "^0.1.0",
     "@sudobility/types": "^1.9.79",
     "@typescript-eslint/eslint-plugin": "~8.72.0",
     "@typescript-eslint/parser": "~8.72.0",
@@ -68,5 +69,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Sudobility/music_types.git"
+  },
+  "dependencies": {
+    "@sudobility/printing_core": "^0.1.0"
   }
 }

@@ -4,8 +4,12 @@
   "workspaces": {
     "": {
       "name": "@sudobility/music_types",
+      "dependencies": {
+        "@sudobility/printing_core": "^0.1.0",
+      },
       "devDependencies": {
         "@eslint/js": "~9.39.5",
+        "@sudobility/printing_core": "^0.1.0",
         "@sudobility/types": "^1.9.79",
         "@typescript-eslint/eslint-plugin": "~8.72.0",
         "@typescript-eslint/parser": "~8.72.0",
@@ -225,6 +229,8 @@
     "@rushstack/ts-command-line": ["@rushstack/ts-command-line@5.3.17", "", { "dependencies": { "@rushstack/terminal": "0.24.7", "@types/argparse": "1.0.38", "argparse": "~1.0.9", "string-argv": "~0.3.1" } }, "sha512-pIwhWawZXAT0nTXwvcE/InQ7uaVAgSeIzILMb2mBrI01Hz1yEvxrhV2+DE2Fzux8aZY9OJTdLsI+sk9kZDuAJw=="],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
+
+    "@sudobility/printing_core": ["@sudobility/printing_core@0.1.0", "https://npm.pkg.github.com/download/@sudobility/printing_core/0.1.0/acf6731917551e8d938f2ee398d0a1108409a9a3", { "peerDependencies": { "react": "^18.0.0 || ^19.0.0" } }, "sha512-b3/SNkCrF+CFeMW3xa5Ua2WCdp8Qsh6j1xAfcDIOu+7HwwwgFYDdVhJgKlyoF/swFO108j+iA1pvTTfO4llo+g=="],
 
     "@sudobility/types": ["@sudobility/types@1.9.79", "https://npm.pkg.github.com/download/@sudobility/types/1.9.79/59975e39d6ab7e215418a489ef3cfe214b7521f4", {}, "sha512-rRtDT++fVy+I1m6E31fq752lxCQytFzwfqpJe5wDMPLcC1rJOBa7v+4+5e3cmX8VV1CsuLg8PTLMFe6A7AELRQ=="],
 
@@ -533,6 +539,8 @@
     "punycode": ["punycode@2.3.1", "", {}, "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="],
 
     "quansync": ["quansync@0.2.11", "", {}, "sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA=="],
+
+    "react": ["react@19.3.1", "", {}, "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw=="],
 
     "require-from-string": ["require-from-string@2.0.2", "", {}, "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw=="],
 
