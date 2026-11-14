@@ -4,12 +4,9 @@
   "workspaces": {
     "": {
       "name": "@sudobility/music_types",
-      "dependencies": {
-        "@sudobility/printing_core": "^0.1.0",
-      },
       "devDependencies": {
         "@eslint/js": "~9.39.5",
-        "@sudobility/printing_core": "^0.1.0",
+        "@sudobility/printing_core": "^0.1.1",
         "@sudobility/types": "^1.10.2",
         "@typescript-eslint/eslint-plugin": "~8.72.0",
         "@typescript-eslint/parser": "~8.72.0",
