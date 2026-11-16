@@ -34,6 +34,24 @@ export * from "./model/score";
 export * from "./model/schemas";
 export * from "./model/generation";
 export * from "./model/api";
+// The response envelope is now the canonical one from @sudobility/types. The
+// error-code field is gone; `ApiResponse<T>` is `BaseResponse<T>`. The
+// constructors live in that dependency (so the clock call stays out of this
+// clock-free package) and are re-exported here for the family.
+export type {
+  BaseResponse,
+  ApiResponse,
+  ApiInfoResponse,
+  HealthResponse,
+  HealthCheckData,
+  PaginatedResponse,
+} from "@sudobility/types";
+export {
+  successResponse,
+  errorResponse,
+  isSuccessResponse,
+  isErrorResponse,
+} from "@sudobility/types";
 export * from "./model/live";
 export * from "./model/position";
 export * from "./model/selection-source";

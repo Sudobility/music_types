@@ -4,7 +4,6 @@
  */
 import { describe, expect, it } from "vitest";
 import {
-  API_ERROR_CODES,
   AVATAR_MAX_BYTES,
   AVATAR_MIME_TYPES,
   NICKNAME_MAX_LENGTH,
@@ -30,23 +29,20 @@ import {
 import { createEmptyScore } from "./test-helpers";
 
 describe("envelope helpers", () => {
-  it("successResponse wraps data with success: true and no error", () => {
-    expect(successResponse({ x: 1 })).toEqual({
-      success: true,
-      data: { x: 1 },
-    });
+  // The canonical envelope from @sudobility/types: success/error plus an ISO
+  // timestamp, and no error-code field.
+  it("successResponse wraps data with success: true and a timestamp", () => {
+    const r = successResponse({ x: 1 });
+    expect(r.success).toBe(true);
+    expect(r.data).toEqual({ x: 1 });
+    expect(typeof r.timestamp).toBe("string");
   });
 
-  it("errorResponse wraps a message with success: false", () => {
-    expect(errorResponse("boom")).toEqual({ success: false, error: "boom" });
-  });
-
-  it("errorResponse includes a typed code when given", () => {
-    expect(errorResponse("limit", API_ERROR_CODES.QUOTA_EXCEEDED)).toEqual({
-      success: false,
-      error: "limit",
-      code: "QUOTA_EXCEEDED",
-    });
+  it("errorResponse wraps a message with success: false and a timestamp", () => {
+    const r = errorResponse("boom");
+    expect(r.success).toBe(false);
+    expect(r.error).toBe("boom");
+    expect(typeof r.timestamp).toBe("string");
   });
 });
 
