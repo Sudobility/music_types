@@ -76,6 +76,7 @@ export const STYLE_FAMILY_OF: Readonly<Record<GenerateScoreStyle, StyleFamily>> 
     cinematic: "screen",
     battle: "screen",
     ambient: "screen",
+    bollywood: "screen",
   };
 
 /** The family a style token belongs to, or null for one this build does not know. */

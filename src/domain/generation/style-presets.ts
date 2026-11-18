@@ -49,6 +49,7 @@ const GENERATE_SCORE_STYLE_KEYS = [
   "symphonyMedium",
   "symphonyLarge",
   "march",
+  "bollywood",
 ] as const;
 
 export type GenerateScoreStyle = (typeof GENERATE_SCORE_STYLE_KEYS)[number];
@@ -578,6 +579,21 @@ const STYLE_PRESET_SOURCE: Readonly<
     tempo: 116,
     keys: [-2, -3, -1, 0],
     timeSignature: "2/4",
+  },
+  bollywood: {
+    prompt:
+      "Bollywood filmi — a bright Hindi film song over a tabla-and-dholak keherwa groove, a soaring ornamented lead vocal answered by lush strings and a bansuri flute, with harmonium, plucked sitar and santoor colour, frequent grace notes and melismatic turns, and a lift into a big full-band hook",
+    essential: [KIT, "48"],
+    preferred: [VOICE, "20"],
+    optional: ["104", "73", "15", "89"],
+    tempo: 108,
+    // Minor tonics, per the field's doc comment: 0 is A minor here. Filmi
+    // leans to a harmonic-minor / Bhairavi colour, but the up-tempo dance and
+    // romance numbers are as often major, so the mode is a default, not a wall.
+    keys: [0, -1, -2, 1],
+    timeSignature: "4/4",
+    mode: "minor",
+    modeFixed: false,
   },
 };
 
